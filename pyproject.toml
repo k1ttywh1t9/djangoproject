@@ -1,0 +1,20 @@
+[project]
+name = "djangoproject"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "k1ttywh1t9",email = "k1ttywh1t9@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "django (>=5.2.5,<6.0.0)",
+    "psycopg2 (>=2.9.10,<3.0.0)",
+    "environ (>=1.0,<2.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
