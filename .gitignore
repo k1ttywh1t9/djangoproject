@@ -1,0 +1,8 @@
+.vscode/
+.idea/
+core/project/settings/local.py
+.venv/
+*.pyc
+.env
+static/*
+!static/.gitkeep
