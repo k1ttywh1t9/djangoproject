@@ -26,7 +26,7 @@ storages-logs:
 
 .PHONY: app
 app:
-	${DC} -f ${STORAGES_FILE} -f ${APP_FILE} ${ENV} up -d
+	${DC} -f ${STORAGES_FILE} -f ${APP_FILE} ${ENV} up --build -d
 
 .PHONY: app-logs
 app-logs:
@@ -39,6 +39,10 @@ app-down:
 .PHONY: migrate
 migrate:
 	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} migrate
+
+.PHONY: migrations
+migrations:
+	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} makemigrations
 
 .PHONY: superuser
 superuser:
