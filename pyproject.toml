@@ -5,11 +5,12 @@ description = ""
 authors = ["k1ttywh1t9 <k1ttywh1t9@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
-python = "3.11.9"
+python = "3.11.13"
 django = "^5.0"
-psycopg2 = "^2.9.9"
+psycopg2-binary = "^2.9.9"
 django-environ = "^0.11.2"
 django-ninja = "^1.1.0"
 punq = "^0.7.0"

@@ -1,7 +1,10 @@
-FROM python:3.12.1-alpine
+FROM python:3.11.13-alpine
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+
+ENV VIRTUALENV_PYTHON_TCL=false
+
 
 WORKDIR /app
 
@@ -14,7 +17,7 @@ RUN apk update && \
 
 ADD pyproject.toml /app
 
-RUN pip install --upgrade pip
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel virtualenv
 RUN pip install poetry
 
 RUN poetry config virtualenvs.create false
