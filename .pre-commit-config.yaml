@@ -36,12 +36,12 @@ repos:
             --remove-unused-variables,
         ]
 
-# -   repo: https://github.com/psf/black
-#     rev: 22.3.0
-#     hooks:
-#     -   id: black
-#         language_version: python3.11
-#         args: ['-S']
+-   repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+    -   id: black
+        language_version: python3.11
+        args: ['-S']
 
 -   repo: https://github.com/pycqa/isort
     rev: 5.13.2

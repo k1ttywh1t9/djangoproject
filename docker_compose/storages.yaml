@@ -3,7 +3,7 @@ services:
     image: postgres:latest
     container_name: example-db
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
@@ -11,3 +11,7 @@ services:
 
 volumes:
   postgres_data:
+    name: "${COMPOSE_PROJECT_NAME}_postgres_data"   # => 
+    labels:
+      project: "${COMPOSE_PROJECT_NAME}"      # => 
+      role: "database"
