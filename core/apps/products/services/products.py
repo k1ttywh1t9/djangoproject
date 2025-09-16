@@ -7,7 +7,7 @@ from typing import Iterable
 from django.db.models import Q
 
 from core.api.filters import PaginationIn
-from core.api.v1.products.filters import ProductFilters
+from core.api.v1.products.filters.products import ProductFilters
 from core.apps.products.entities.products import Product
 from core.apps.products.models.products import Product as ProductModel
 
@@ -44,11 +44,9 @@ class ORMProductService(BaseProductService):
         pagination: PaginationIn,
     ) -> Iterable[Product]:
         query = self._build_product_query(filters)
-        qs = (
-            ProductModel
-            .objects
-            .filter(query)[pagination.offset:pagination.offset + pagination.limit]
-        )
+        qs = ProductModel.objects.filter(query)[
+            pagination.offset : pagination.offset + pagination.limit  # noqa
+        ]
 
         return [product.to_entity() for product in qs]
 

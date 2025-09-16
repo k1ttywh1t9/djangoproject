@@ -7,7 +7,7 @@ import pytest
 from tests.factories.products import ProductModelFactory
 
 from core.api.filters import PaginationIn
-from core.api.v1.products.filters import ProductFilters
+from core.api.v1.products.filters.products import ProductFilters
 from core.apps.products.services.products import BaseProductService
 
 
@@ -35,7 +35,8 @@ def test_get_products_all(product_service: BaseProductService):
     products_titles = {product.title for product in products}
 
     fetched_products = product_service.get_product_list(
-        ProductFilters(), PaginationIn(),
+        ProductFilters(),
+        PaginationIn(),
     )
     fetched_titles = {product.title for product in fetched_products}
 
