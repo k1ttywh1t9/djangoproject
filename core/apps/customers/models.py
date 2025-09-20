@@ -27,6 +27,7 @@ class Customer(TimedBaseModel):
         return Customer(
             phone=self.phone,
             created_at=self.created_at,
+            id=self.pk,
         )
 
     class Meta:

@@ -34,7 +34,7 @@ app-logs:
 
 .PHONY: app-down
 app-down:
-	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} down
+	${DC} -f ${STORAGES_FILE} -f ${APP_FILE} ${ENV} down
 
 .PHONY: migrate
 migrate:
