@@ -22,6 +22,7 @@ class CreateReviewUseCase:
         product_id: int,
         review: ReviewEntity,
     ) -> ReviewEntity:
+        raise Exception("хуйговно")
         customer = self.customer_service.get_by_token(token=customer_token)
         product = self.product_service.get_by_id(product_id=product_id)
 

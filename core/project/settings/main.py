@@ -41,12 +41,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third party
+    "elasticapm.contrib.django",
     # first party
     "core.apps.products.apps.ProductsConfig",
     "core.apps.customers.apps.CustomersConfig",
 ]
 
 MIDDLEWARE = [
+    "core.project.middlewares.ElasticApmMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -132,3 +135,13 @@ STATIC_ROOT = BASE_DIR / "static"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+ELASTIC_APM = {
+    "SERVICE_NAME": "reviews",
+    # "SECRET_TOKEN": env("APM_SECRET_TOKEN", default='secrettoken'), # noqa
+    "SERVER_URL": env("APM_URL", default="http://apm-server:8200"),
+    "DEBUG": DEBUG,
+    "CAPTURE_BODY": "all",
+    "ENVIRONMENT": "prod",
+}

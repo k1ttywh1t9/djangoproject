@@ -1,12 +1,14 @@
 DC = docker compose
 STORAGES_FILE = docker_compose/storages.yaml
 APP_FILE = docker_compose/app.yaml
+MONITORING_FILE = docker_compose/monitoring.yaml
 EXEC = docker exec -it
 DB_CONTAINER = example-db
 APP_CONTAINER = main-app
 LOGS = docker logs
 ENV = --env-file .env
 MANAGE_PY = python manage.py
+
 
 .PHONY: storages
 storages:
@@ -27,6 +29,20 @@ storages-logs:
 .PHONY: app
 app:
 	${DC} -f ${STORAGES_FILE} -f ${APP_FILE} ${ENV} up --build -d
+
+.PHONY: monitoring
+monitoring:
+	${DC} -f ${MONITORING_FILE} ${ENV} up --build -d
+
+.PHONY: monitoring-down
+monitoring-down:
+	${DC} -f ${MONITORING_FILE} ${ENV} down
+
+
+.PHONY: monitoring-logs
+monitoring-logs:
+	${DC} -f ${MONITORING_FILE} ${ENV} logs -f
+
 
 .PHONY: app-logs
 app-logs:

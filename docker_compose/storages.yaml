@@ -15,3 +15,5 @@ volumes:
     labels:
       project: "${COMPOSE_PROJECT_NAME}"      # => 
       role: "database"
+    driver: local
+    
