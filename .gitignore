@@ -8,3 +8,4 @@ static/*
 !static/.gitkeep
 *.sqlite*
 **/.pytest_cache/*
+.pytest_cache
