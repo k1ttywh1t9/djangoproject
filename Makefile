@@ -10,64 +10,63 @@ ENV = --env-file .env
 MANAGE_PY = python manage.py
 
 
-.PHONY: storages
+# storages
+.PHONY: storages storages-down storages-logs postgres-psql
 storages:
 	${DC} -f ${STORAGES_FILE} ${ENV} up -d
 
-.PHONY: storages-down
 storages-down:
 	${DC} -f ${STORAGES_FILE} down
 
-.PHONY: postgres
-postgres:
-	${EXEC} ${DB_CONTAINER} psql
-
-.PHONY: storages-logs
 storages-logs:
 	${LOGS} ${DB_CONTAINER} -f
 
-.PHONY: app
+postgres-psql:
+	${EXEC} ${DB_CONTAINER} psql
+
+
+# migrations
+.PHONY: migrate migrations
+migrate:
+	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} migrate
+
+migrations:
+	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} makemigrations
+
+
+# app
+.PHONY: app app-logs app-down superuser collectstatic
 app:
 	${DC} -f ${STORAGES_FILE} -f ${APP_FILE} ${ENV} up --build -d
 
-.PHONY: monitoring
+app-logs:
+	${LOGS} ${APP_CONTAINER} -f
+
+app-down:
+	${DC} -f ${STORAGES_FILE} -f ${APP_FILE} ${ENV} down
+
+superuser:
+	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} createsuperuser
+
+collectstatic:
+	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} collectstatic
+
+
+
+# monitoring
+.PHONY: monitoring monitoring-down monitoring-logs
 monitoring:
 	${DC} -f ${MONITORING_FILE} ${ENV} up --build -d
 
-.PHONY: monitoring-down
 monitoring-down:
 	${DC} -f ${MONITORING_FILE} ${ENV} down
 
-
-.PHONY: monitoring-logs
 monitoring-logs:
 	${DC} -f ${MONITORING_FILE} ${ENV} logs -f
 
 
-.PHONY: app-logs
-app-logs:
-	${LOGS} ${APP_CONTAINER} -f
-
-.PHONY: app-down
-app-down:
-	${DC} -f ${STORAGES_FILE} -f ${APP_FILE} ${ENV} down
-
-.PHONY: migrate
-migrate:
-	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} migrate
-
-.PHONY: migrations
-migrations:
-	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} makemigrations
-
-.PHONY: superuser
-superuser:
-	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} createsuperuser
-
-.PHONY: collectstatic
-collectstatic:
-	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} collectstatic
-
+# tests
 .PHONY: run-test
 run-test:
 	${EXEC} ${APP_CONTAINER} pytest
+
