@@ -1,3 +1,5 @@
+version: '5.1.3'
+
 services:
   apm-server:
     image: docker.elastic.co/apm/apm-server:7.6.2
@@ -9,15 +11,15 @@ services:
     cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
     cap_drop: ["ALL"]
     ports:
-      - 8200:8200
-    command:
-       apm-server -e
-         -E apm-server.rum.enabled=true
-         -E setup.kibana.host=kibana:5601
-         -E setup.template.settings.index.number_of_replicas=0
-         -E apm-server.kibana.enabled=true
-         -E apm-server.kibana.host=kibana:5601
-         -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    - 8200:8200
+    command: >
+      apm-server -e
+        -E apm-server.rum.enabled=true
+        -E setup.kibana.host=kibana:5601
+        -E setup.template.settings.index.number_of_replicas=0
+        -E apm-server.kibana.enabled=true
+        -E apm-server.kibana.host=kibana:5601
+        -E output.elasticsearch.hosts=["elasticsearch:9200"]
     healthcheck:
       interval: 30s
       retries: 12
@@ -26,20 +28,19 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     environment:
-      - bootstrap.memory_lock=true
-      - cluster.name=docker-cluster
-      - cluster.routing.allocation.disk.threshold_enabled=false
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-XX:UseAVX=2 -Xms1g -Xmx1g
+    - bootstrap.memory_lock=true
+    - cluster.name=docker-cluster
+    - cluster.routing.allocation.disk.threshold_enabled=false
+    - discovery.type=single-node
+    - ES_JAVA_OPTS=-XX:UseAVX=2 -Xms1g -Xmx1g
     ulimits:
       memlock:
         hard: -1
         soft: -1
     volumes:
-      - esdata:/usr/share/elasticsearch/data
+    - esdata:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
-    
+    - 9200:9200
     healthcheck:
       interval: 30s
       retries: 10
@@ -54,17 +55,26 @@ services:
       ELASTICSEARCH_URL: http://elasticsearch:9200
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     ports:
-      - 5601:5601
+    - 5601:5601
+
+    networks:
+      - metrics-network
     
     healthcheck:
       interval: 30s
       retries: 20
       test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
 
+networks:
+  metrics-network:
+    external: true
+    name: ${COMPOSE_PROJECT_NAME}_metrics
+
+
 volumes:
   esdata:
-    name: "${COMPOSE_PROJECT_NAME}_esdata"   # => 
+    name: "${COMPOSE_PROJECT_NAME}_esdata"
     labels:
-      project: "${COMPOSE_PROJECT_NAME}"      # => 
+      project: "${COMPOSE_PROJECT_NAME}" 
       role: "monitoring"
     driver: local

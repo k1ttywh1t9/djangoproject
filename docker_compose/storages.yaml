@@ -8,12 +8,19 @@ services:
       - postgres_data:/var/lib/postgresql/data
     env_file:
       - ../.env
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    external: true
+    name: ${COMPOSE_PROJECT_NAME}_backend
 
 volumes:
   postgres_data:
-    name: "${COMPOSE_PROJECT_NAME}_postgres_data"   # => 
+    name: "${COMPOSE_PROJECT_NAME}_postgres_data"
     labels:
-      project: "${COMPOSE_PROJECT_NAME}"      # => 
+      project: "${COMPOSE_PROJECT_NAME}"
       role: "database"
     driver: local
     

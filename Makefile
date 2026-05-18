@@ -1,4 +1,5 @@
 DC = docker compose
+NETWORKS_FILE = docker_compose/networks.yaml
 STORAGES_FILE = docker_compose/storages.yaml
 APP_FILE = docker_compose/app.yaml
 MONITORING_FILE = docker_compose/monitoring.yaml
@@ -10,9 +11,17 @@ ENV = --env-file .env
 MANAGE_PY = python manage.py
 
 
+# networks
+.PHONY: network-up network-down
+network-up:
+	${DC} -f ${NETWORKS_FILE} ${ENV} create
+network-down:
+	${DC} -f ${NETWORKS_FILE} ${ENV} down
+
+
 # storages
 .PHONY: storages storages-down storages-logs postgres-psql
-storages:
+storages: network-up
 	${DC} -f ${STORAGES_FILE} ${ENV} up -d
 
 storages-down:
@@ -25,18 +34,9 @@ postgres-psql:
 	${EXEC} ${DB_CONTAINER} psql
 
 
-# migrations
-.PHONY: migrate migrations
-migrate:
-	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} migrate
-
-migrations:
-	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} makemigrations
-
-
 # app
 .PHONY: app app-logs app-down superuser collectstatic
-app:
+app: network-up
 	${DC} -f ${STORAGES_FILE} -f ${APP_FILE} ${ENV} up --build -d
 
 app-logs:
@@ -52,10 +52,18 @@ collectstatic:
 	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} collectstatic
 
 
+# migrations
+.PHONY: migrate migrations
+migrate:
+	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} migrate
+
+migrations:
+	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} makemigrations
+
 
 # monitoring
 .PHONY: monitoring monitoring-down monitoring-logs
-monitoring:
+monitoring: network-up
 	${DC} -f ${MONITORING_FILE} ${ENV} up --build -d
 
 monitoring-down:
