@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16.4-bookworm
-    container_name: "${COMPOSE_PROJECT_NAME}-postgres-db"
+    container_name: djpr-postgres-db
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
