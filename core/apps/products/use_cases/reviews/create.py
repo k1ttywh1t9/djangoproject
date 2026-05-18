@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from logging import Logger
 
 from core.apps.customers.services.customers import BaseCustomerService
 from core.apps.products.entities.reviews import Review as ReviewEntity
@@ -15,6 +16,7 @@ class CreateReviewUseCase:
     customer_service: BaseCustomerService
     product_service: BaseProductService
     validator_service: BaseReviewValidatorService
+    logger: Logger
 
     def execute(
         self,
@@ -22,7 +24,18 @@ class CreateReviewUseCase:
         product_id: int,
         review: ReviewEntity,
     ) -> ReviewEntity:
-        raise Exception("хуйговно")
+        try:
+            raise Exception(123)
+        except Exception as e:
+            self.logger.error(
+                "There was some crazy error",
+                exc_info=True,
+                extra={
+                    "datetime": "123",
+                },
+            )
+            raise e
+
         customer = self.customer_service.get_by_token(token=customer_token)
         product = self.product_service.get_by_id(product_id=product_id)
 

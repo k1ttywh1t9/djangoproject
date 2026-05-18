@@ -1,9 +1,11 @@
+from logging import Logger
 from django.http import HttpRequest
 from ninja import (
     Header,
     Router,
 )
 from ninja.errors import HttpError
+import orjson
 
 from core.api.schemas import ApiResponse
 from core.api.v1.reviews.schemas import (
@@ -43,6 +45,8 @@ def create_review(
         )
 
     except ServiceException as error:
+        logger: Logger = container.resolve(Logger)
+        logger.error(msg="User could not create review", extra=orjson.dumps(error))
         raise HttpError(status_code=400, message=error.message)
 
     return ApiResponse(data=ReviewOutSchema.from_entity(result))
