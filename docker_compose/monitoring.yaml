@@ -20,6 +20,10 @@ services:
         -E apm-server.kibana.enabled=true
         -E apm-server.kibana.host=kibana:5601
         -E output.elasticsearch.hosts=["elasticsearch:9200"]
+
+    networks:
+      - metrics-network
+    
     healthcheck:
       interval: 30s
       retries: 12
@@ -41,6 +45,10 @@ services:
     - esdata:/usr/share/elasticsearch/data
     ports:
     - 9200:9200
+
+    networks:
+      - metrics-network
+    
     healthcheck:
       interval: 30s
       retries: 10
