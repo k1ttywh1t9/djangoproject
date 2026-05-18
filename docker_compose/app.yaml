@@ -1,9 +1,9 @@
 services:
   main-app:
-    container_name: main-app
+    container_name: djpr-main-app
     build:
       context: ..
-      dockerfile: Dockerfile 
+      dockerfile: Dockerfile
     ports:
       - "${DJANGO_PORT}:8000"
     command: "sh /entrypoint.sh"

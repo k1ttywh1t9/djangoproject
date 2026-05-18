@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: example-db
+    container_name: djpr-postgres-db
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
