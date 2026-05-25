@@ -24,17 +24,6 @@ class CreateReviewUseCase:
         product_id: int,
         review: ReviewEntity,
     ) -> ReviewEntity:
-        try:
-            raise Exception(123)
-        except Exception as e:
-            self.logger.error(
-                "There was some crazy error",
-                exc_info=True,
-                extra={
-                    "datetime": "123",
-                },
-            )
-            raise e
 
         customer = self.customer_service.get_by_token(token=customer_token)
         product = self.product_service.get_by_id(product_id=product_id)

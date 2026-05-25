@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from logging import Logger
 from django.http import HttpRequest
 from ninja import (
@@ -15,7 +16,6 @@ from core.api.v1.reviews.schemas import (
 from core.apps.common.exceptions import ServiceException
 from core.apps.products.use_cases.reviews.create import CreateReviewUseCase
 from core.project.containers import get_container
-
 
 router = Router(tags=["Reviews"])
 
@@ -46,7 +46,10 @@ def create_review(
 
     except ServiceException as error:
         logger: Logger = container.resolve(Logger)
-        logger.error(msg="User could not create review", extra=orjson.dumps(error))
+        logger.error(
+            msg="User could not create review",
+            extra={"error_meta": orjson.dumps(error).decode()},
+        )
         raise HttpError(status_code=400, message=error.message)
 
     return ApiResponse(data=ReviewOutSchema.from_entity(result))
