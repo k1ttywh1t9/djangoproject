@@ -15,7 +15,6 @@ from core.api.v1.products.schemas import ProductSchema
 from core.apps.products.services.products import BaseProductService
 from core.project.containers import get_container
 
-
 router = Router(tags=["Products"])
 
 
